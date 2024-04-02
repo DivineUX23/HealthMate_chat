@@ -1,22 +1,33 @@
-from pydantic import BaseModel, root_validator
+#COMMIT TO MASTER ONLY
+
+from pydantic import BaseModel, root_validator, EmailStr
 from model.users_model import User
+from model.doctors_model import Doctor
+
 from database.db import SessionLocal
 from fastapi import HTTPException, status
 
 
-class user(BaseModel):
+class doctor(BaseModel):
 
     name: str
-    email: str
+    email: EmailStr
     password: str
+    mobile: str
+    description: str
+    title: str
 
     class Config:
         from_attributes = True
 
-class show_user(BaseModel):
+class show_doctor(BaseModel):
     name: str
     email: str
-    
+    mobile: int
+    #description: str    
+    title: str
+
+
     class Config:
         from_attributes = True
 
@@ -33,13 +44,9 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     email: str | None = None
-    user_id: int
-    role: str
 
-#class TokenData(BaseModel):
-    #email: str | None = None
 
-class CreateUser(user):
+class CreateUser(doctor):
     password: str
 
     class Config:
@@ -52,7 +59,7 @@ class CreateUser(user):
         email = values.get("email")
 
         with SessionLocal() as db:
-            user_email = db.query(User).filter(User.email == email).first()
+            user_email = db.query(Doctor).filter(Doctor.email == email).first()
             if user_email:
                 raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail= f"Email already exists.")
         

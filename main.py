@@ -11,6 +11,7 @@ from sqlalchemy import func
 from user import app as user
 from user_login import app as user_login
 from llama import app as llama
+from doctors import app as doctors
 
 app = FastAPI()
 
@@ -35,6 +36,7 @@ app.add_middleware(
 app.include_router(user, tags=["User"])
 app.include_router(user_login, tags=["User"])
 app.include_router(llama, tags=["Llama"])
+app.include_router(doctors, tags=["Doctors"])
 
 
 #Testing:
